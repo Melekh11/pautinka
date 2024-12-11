@@ -1,2 +1,7 @@
-fastapi>=0.115.5
+fastapi[standard]>=0.115.5
 pydantic>=2.10
+pyjwt
+passlib[bcrypt]
+psycopg2
+alembic
+sqlmodel
