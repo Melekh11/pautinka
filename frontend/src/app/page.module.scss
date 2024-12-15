@@ -18,3 +18,11 @@
     border-radius: 30px;
   }
 }
+
+.page {
+  min-height: 100vh;
+  // display: flex;
+  padding-top: 30px;
+  flex-direction: column;
+  align-items: center;
+}

@@ -1,0 +1,47 @@
+.input {
+  border: none;
+  margin-left: 59px;
+  font-size: 18px;
+  font-family: 'Sofia Sans', 'Sofia Sans Fallback';
+  background-color: rgba(0, 0, 0, 0);
+  
+
+  &:focus {
+    border: none;
+    outline: none;
+  }
+
+  &_wrapper {
+    margin-bottom: 15px;
+    background-color: #FFFFFF85;
+    border-radius: 57px;
+    height: 52px;
+    padding: 7px;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  &_image_container {
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    height: 38px;
+    width: 38px;
+    top: 7px;
+    left: 7px;
+    display: flex;
+    align-items: center;
+
+    img {
+      width: auto;
+      align-self: center;
+      vertical-align: bottom;
+      margin: auto;
+    }
+  }
+
+  &_label {
+    position: relative;
+  }
+}

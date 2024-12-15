@@ -54,7 +54,9 @@ export default function RootLayout({
             <p className={styles.header__h2}>@pautinka_channel</p>
           </Link>
         </header>
-        {children}
+        <main className={styles.page}>
+          {children}
+        </main>
       </body>
     </html>
   );

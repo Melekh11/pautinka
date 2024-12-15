@@ -1,0 +1,32 @@
+.form_container {
+  background-color: #E1E0E069;
+  border-radius: 35px;
+  padding: 43px;
+  margin-top: 30px;
+  position: relative;
+  
+  .data_contract_text {
+    font-size: 11px;
+    font-weight: 300;
+    padding: 15px 0;
+  }
+
+  .circle {
+    position: absolute;
+    border-radius: 50%;
+    height: 266px;
+    width: 266px;
+    z-index: -1;
+    filter: blur(60px);
+    &_1 {
+      background-color: #6E98FF;
+      top: 72px;
+      left: 10px;
+    }
+    &_2 {
+      background-color: #FF6A91;
+      top: 239px;
+      left: 186px;
+    }
+  }
+}

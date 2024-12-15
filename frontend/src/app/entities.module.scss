@@ -10,6 +10,29 @@
   justify-content: space-between;
 }
 
+.flex_around {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.flex_start {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
 .gap_s {
   gap: 6px;
+}
+
+.button {
+  display: inline-block;
+  margin: auto;
+  padding: 5px 15px;
+  border-radius: 43px;
+  align-content: center;
+  background-color: white;
+  border: none;
+  font-family: 'Sofia Sans', 'Sofia Sans Fallback';
 }
