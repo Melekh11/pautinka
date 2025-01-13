@@ -3,6 +3,12 @@
   --foreground: #171717;
 }
 
+@media screen and (max-width: 320px) {
+  #__next {
+    display: flex
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;

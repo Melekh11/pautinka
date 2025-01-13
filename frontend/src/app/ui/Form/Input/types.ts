@@ -1,8 +1,9 @@
-import { InputHTMLAttributes } from 'react';
+import { Dispatch, InputHTMLAttributes, SetStateAction } from 'react';
 
-type InputType = {
+type InputType = Omit<InputHTMLAttributes<HTMLInputElement>, "onChange"> & {
   img: string;
   label?: string;
-} & InputHTMLAttributes<HTMLInputElement>;
+  onChange?: Dispatch<SetStateAction<string>>;
+};
 
 export type { InputType };

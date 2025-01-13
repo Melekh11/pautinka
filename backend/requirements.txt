@@ -5,3 +5,4 @@ passlib[bcrypt]
 psycopg2
 alembic
 sqlmodel
+pyjwt[crypto]

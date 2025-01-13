@@ -12,27 +12,27 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./postgresdata:/var/lib/postgresql/data
+      - ./postgresdata:/var/lib/postgresql/data:z
       - ./init.sql:/docker-entrypoint-initdb.d/dbinit.sql
     networks:
       - awesome
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin4_container
-    restart: always
-    ports:
-      - "8888:80"
-    env_file:
-      ./.env 
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
-    networks:
-      - awesome
-    depends_on:
-      - postgres
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   container_name: pgadmin4_container
+  #   restart: always
+  #   ports:
+  #     - "8888:80"
+  #   env_file:
+  #     ./.env 
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+  #     PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+  #   networks:
+  #     - awesome
+  #   depends_on:
+  #     - postgres
+  #   volumes:
+  #     - pgadmin-data:/var/lib/pgadmin
   backend:
     env_file:
       - ./.env
@@ -46,8 +46,8 @@ services:
     ports:
       - "80:80"
 
-volumes:
-  pgadmin-data:
+# volumes:
+#   pgadmin-data:
 
 networks:
   awesome:

@@ -1,0 +1,332 @@
+.clickable {
+  background-color: #0500FF;
+  color: white;
+  text-align: center;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  font-size: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tag_item {
+  display: inline-block;
+  background-color: #E1E0E069;
+  border-radius: 15px;
+  position: relative;
+  padding: 6px 25px 6px 6px;
+  margin: 5px 5px 5px 0;
+  font-size: 10px;
+  font-weight: 300;
+  & .no_tag {
+    position: absolute;
+    top: 7px;
+    right: 8px;
+  }
+}
+
+.dialog {
+  background-color: #E1E0E069;
+  border-radius: 15px;
+  border: solid black 1px;
+  padding: 10px;
+  // display: flex;
+  // flex-direction: column;
+  // align-items: center;
+
+  &_input {
+    border: none;
+    width: 100%;
+    margin: 5px;
+    background-color: rgba(0, 0, 0, 0);
+    font-size: 12px;
+    font-family: 'Sofia Sans', 'Sofia Sans Fallback';
+    font-weight: 300;
+    background-color: white;
+
+    &:focus {
+      border: none;
+      outline: none;    
+    }
+  }
+}
+
+.new_tag {
+  background-color: #E1E0E069;
+  font-size: 10px;
+  margin: 5px 5px 5px 0;
+  font-size: 10px;
+  font-weight: 300;
+  text-align: center;
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  padding: 6px;
+
+  .new_tag_image {
+    padding-top: 0px;
+    rotate: 45deg;
+  }
+}
+
+.profile_container {
+  overflow: hidden;
+  display: grid;
+  gap: 5px;
+  grid-template-columns: 46% 14% 37%;
+  grid-template-rows: repeat(4, auto);
+
+  grid-template-areas:
+    "top_info     top_info     top_info"
+    "contact_data contact_data study_data"
+    "status       status       status"
+    "about        links_jobs   links_jobs";
+
+  & .top_info {
+
+    grid-area: top_info;
+    // justify-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+
+    & .h2 {
+      background-color: #0500FF;
+      padding: 20px 40px;
+      color: white;
+      font-size: 25px;
+      border-radius: 19px;
+    }
+
+    & .subscribers_data {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      // gap: 10px; 
+
+      & .subscriber_item {
+        width: 100px;
+        height: 82px;
+        background-color: #E1E0E069;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 7px;
+        // justify-content: space-between;
+        padding: 10px;
+        border-radius: 10px;
+        font-size: 15px;
+         & .subscriber_item_number {
+          font-weight: 900;
+          font-size: 30px;
+         }
+      }
+    }
+
+    & .ava {
+      position: relative;
+      border-radius: 50%;
+      background-color: rgba(128, 127, 127, 0.027);
+      grid-column-start: 1;
+      grid-column-end: 5;
+      grid-row-start: 1;
+      grid-row-end: 2;
+    }
+  }
+
+  .blog_container {
+    flex-grow: 1;
+    position: relative;
+    overflow: hidden;
+    width: 95%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 24px;
+    white-space: pre-line;
+    padding-left: 5px;
+    border-radius: 10px;
+
+    .go_to_blog {
+      position: absolute;
+      bottom: 18px;
+      right: 40px;
+    }
+
+    .circle {
+      position: absolute;
+      border-radius: 50%;
+      height: 60px;
+      width: 60px;
+      z-index: -1;
+      filter: blur(10px);
+      &_1 {
+        background-color: #6E98FF;
+        top: 7px;
+        left: 7px;
+      }
+      &_2 {
+        background-color: #FF6A91;
+        top: 45px;
+        left: 45px;
+      }
+    }
+  }
+
+  .input_container {
+    background-color: #E1E0E069;
+    width: 100%;
+    padding: 0 5px 5px 5px;
+    // margin-top: 5px;
+    margin-bottom: 5px;
+    border-radius: 10px;
+
+    label {
+      font-size: 10px;
+      margin-left: 5px;
+      text-decoration: underline;
+    }
+
+    .field {
+      border: none;
+      width: 100%;
+      margin: 5px;
+      background-color: rgba(0, 0, 0, 0);
+      font-size: 18px;
+      font-family: 'Sofia Sans', 'Sofia Sans Fallback';
+
+      &:focus {
+        border: none;
+        outline: none;    
+      }
+    }
+  }
+
+  & .contact_data {
+    grid-area: contact_data;
+  }
+
+  & .study_data {
+    grid-area: study_data;
+    display: flex;
+    flex-direction: column;
+  }
+
+  & .status {
+    grid-area: status;
+    border-radius: 10px;
+    padding: 12px;
+    background-color: #E1E0E069;
+    font-size: 12px;
+
+
+    .status_list {
+      margin-left: 15px;
+    }
+
+    .top_status {
+      margin: 0 0 5px 5px;
+      color: #0500FF;
+      display: block;
+    }
+
+    .down_status {
+      margin: 0 0 5px 5px;
+      display: block;
+    }
+
+  }
+
+  & .about {
+    grid-area: about;
+    border-radius: 10px;
+    padding: 25px 12px 12px 12px;
+    background-color: #E1E0E069;
+    font-size: 14px;
+    position: relative;
+
+    .title {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 10px;
+    }
+
+  }
+
+  & .links_jobs {
+    grid-area: links_jobs;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    .links {
+      border-radius: 10px;
+      padding: 25px 12px 12px 12px;
+      background-color: #E1E0E069;
+      font-size: 14px;
+      position: relative;
+
+      .title {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-size: 10px;
+      }
+    }
+
+    .jobs {
+      border-radius: 10px;
+      padding: 25px 12px 12px 12px;
+      background-color: #E1E0E069;
+      font-size: 14px;
+      position: relative;
+
+      .title {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-size: 10px;
+      }
+    }
+  }
+}
+
+.work {
+  width: 100px;
+  // height: 100px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 2px;
+  background-color: #C2C2C269;
+  margin: 10px 0px 10px 0px;
+  border-radius: 10px;
+
+  &_company {
+    font-size: 14px;
+    font-weight: 900;
+  }
+
+  &_image {
+
+  }
+
+  &_position {
+    font-size: 12px;
+  }
+
+  &_dates {
+    font-weight: 300;
+    font-size: 10px;
+  }
+}

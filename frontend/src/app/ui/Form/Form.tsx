@@ -4,14 +4,15 @@ import entStyles from "../../entities.module.scss";
 import Image from "next/image";
 
 export const Form = function({
-  onSubmit,
+  action,
   className,
   title,
-  children
+  children,
+  isSubmitLoading,
 }: FormType) {
   return (
     <form
-      onSubmit={onSubmit}
+      action={action}
       className={`${styles.form} ${className}`}
     >
       <h1>{title}</h1>
@@ -25,7 +26,8 @@ export const Form = function({
         className={`${entStyles.flex_align}`}
       >
         <button
-          
+          type="submit"
+          disabled={isSubmitLoading}
           className={entStyles.button}
         >Ввод</button>
         <div

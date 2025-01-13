@@ -1,8 +1,8 @@
 from sqlmodel import select
 
 from database import SessionDep
-from models.users import Users as UserModel
-from shemas.user import RegestratingUser
+from models.users import Users as UserModel, Workreviews as WorkreviewModel
+from shemas.user import RegestratingUser, WorkReview
 
 def get_user_by_email(email: str, session: SessionDep) -> UserModel | None:
     return session.exec(select(UserModel)
@@ -28,3 +28,16 @@ def create_user(user: RegestratingUser, hashed_password: str) -> UserModel:
     )
     
     return new_user
+
+
+def create_workreview(review: WorkReview, owner_id: int) -> WorkreviewModel:
+    new_review = WorkreviewModel(
+        post=review.post,
+        date_start=review.date_start,
+        date_end=review.date_end,
+        company_name=review.company_name,
+        subcompany_name=review.subcompany_name,
+        user_id=owner_id,
+    )
+    
+    return new_review
