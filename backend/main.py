@@ -11,7 +11,9 @@ from database import create_db_and_tables
 
 load_dotenv(override=True)
 
-logging.basicConfig(format="%(levelname)s:%(asctime)s:%(message)s", datefmt='%d/%m/%Y %I:%M:%S %p')
+logging.basicConfig(
+    format="%(levelname)s:%(asctime)s:%(message)s", datefmt="%d/%m/%Y %I:%M:%S %p"
+)
 logger = logging.getLogger(__name__)
 logger.setLevel("DEBUG")
 

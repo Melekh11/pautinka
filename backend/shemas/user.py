@@ -13,7 +13,7 @@ class LoggingUser(BaseModel):
 class RegisterUser(LoggingUser):
     name: str
     surname: str
-    
+
 
 class ResponseUser(BaseModel):
     id: int
@@ -33,8 +33,8 @@ class ResponseUser(BaseModel):
 
 class EditedUser(ResponseUser):
     pass
-    
-    
+
+
 class WorkReview(BaseModel):
     post: str
     date_start: Optional[date]

@@ -9,13 +9,15 @@ from alembic import context
 from dotenv import load_dotenv
 
 from sqlmodel import SQLModel
-sys.path = ['', '..'] + sys.path[1:]
+
+sys.path = ["", ".."] + sys.path[1:]
 from models.users import TagsUsers, Subscription, Users, Tags
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-BASE_DIR = os.path.abspath(os.path.dirname(__file__)) # get current env.py path
-load_dotenv(os.path.join(BASE_DIR, '../', '.env'), override=True) # full path to .env
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))  # get current env.py path
+load_dotenv(os.path.join(BASE_DIR, "../", ".env"), override=True)  # full path to .env
 # DATABASE_URL = os.environ.get("DATABASE_URL")
 
 # database_url = f"postgresql://postgres:qwerty@localhost:5432/postgres_database"
@@ -80,9 +82,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()

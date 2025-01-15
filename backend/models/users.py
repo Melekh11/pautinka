@@ -4,7 +4,6 @@ from typing import Optional
 from sqlmodel import SQLModel, Field, Relationship
 
 
-
 class TagsUsers(SQLModel, table=True):
     user_id: int = Field(foreign_key="users.id", primary_key=True)
     tag_id: int = Field(foreign_key="tags.id", primary_key=True)
@@ -16,7 +15,7 @@ class Subscription(SQLModel, table=True):
         back_populates="subscribers",
         sa_relationship_kwargs={"foreign_keys": "Subscription.user_id_from"},
     )
-    
+
     user_id_to: int = Field(foreign_key="users.id", primary_key=True)
     user_to: "Users" = Relationship(
         back_populates="followers",
@@ -41,12 +40,16 @@ class Users(SQLModel, table=True):
 
     hashed_password: Optional[str]
 
-    subscribers: list["Subscription"] = Relationship(back_populates="user_to", sa_relationship_kwargs={
+    subscribers: list["Subscription"] = Relationship(
+        back_populates="user_to",
+        sa_relationship_kwargs={
             "foreign_keys": "Subscription.user_id_from",
             "lazy": "selectin",
         },
     )
-    followers: list["Subscription"] = Relationship(back_populates="user_from", sa_relationship_kwargs={
+    followers: list["Subscription"] = Relationship(
+        back_populates="user_from",
+        sa_relationship_kwargs={
             "foreign_keys": "Subscription.user_id_to",
             "lazy": "selectin",
         },

@@ -4,14 +4,13 @@ from database import SessionDep
 from models.users import Users as UserModel, Workreviews as WorkreviewModel
 from shemas.user import RegisterUser, WorkReview
 
+
 def get_user_by_email(email: str, session: SessionDep) -> UserModel | None:
-    return session.exec(select(UserModel)
-                        .where(UserModel.email == email)).first()
+    return session.exec(select(UserModel).where(UserModel.email == email)).first()
 
 
 def get_user_by_phone(phone: str, session: SessionDep) -> UserModel | None:
-    return session.exec(select(UserModel)
-                        .where(UserModel.phone == phone)).first()
+    return session.exec(select(UserModel).where(UserModel.phone == phone)).first()
 
 
 def get_user_by_id(id: int, session: SessionDep) -> UserModel | None:
@@ -24,7 +23,7 @@ def create_user(user: RegisterUser, hashed_password: str) -> UserModel:
         surname=user.surname,
         phone=user.phone,
         email=user.email,
-        hashed_password=hashed_password
+        hashed_password=hashed_password,
     )
 
     return new_user
