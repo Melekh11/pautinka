@@ -6,3 +6,5 @@ psycopg2
 alembic
 sqlmodel
 pyjwt[crypto]
+alembic
+black

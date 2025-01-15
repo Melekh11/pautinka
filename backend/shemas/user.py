@@ -1,4 +1,4 @@
-from typing import Annotated, Optional
+from typing import Annotated, Optional, ClassVar
 from datetime import date
 
 from pydantic import BaseModel
@@ -10,12 +10,12 @@ class LoggingUser(BaseModel):
     password: str
 
 
-class RegestratingUser(LoggingUser):
+class RegisterUser(LoggingUser):
     name: str
     surname: str
     
 
-class User(BaseModel):
+class ResponseUser(BaseModel):
     id: int
     name: Optional[str]
     surname: Optional[str]
@@ -31,14 +31,8 @@ class User(BaseModel):
     links: Optional[str]
 
 
-class EditedUser(User):
-    university: Optional[str]
-    birthdate: Optional[date]
-    course: Optional[str]
-    short_status: Optional[str]
-    full_status: Optional[str]
-    about_me: Optional[str]
-    links: Optional[str]
+class EditedUser(ResponseUser):
+    pass
     
     
 class WorkReview(BaseModel):

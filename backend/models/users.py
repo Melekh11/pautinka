@@ -3,6 +3,8 @@ from typing import Optional
 
 from sqlmodel import SQLModel, Field, Relationship
 
+
+
 class TagsUsers(SQLModel, table=True):
     user_id: int = Field(foreign_key="users.id", primary_key=True)
     tag_id: int = Field(foreign_key="tags.id", primary_key=True)
@@ -36,9 +38,9 @@ class Users(SQLModel, table=True):
     full_status: Optional[str]
     about_me: Optional[str]
     links: Optional[str]
-    
+
     hashed_password: Optional[str]
-    
+
     subscribers: list["Subscription"] = Relationship(back_populates="user_to", sa_relationship_kwargs={
             "foreign_keys": "Subscription.user_id_from",
             "lazy": "selectin",

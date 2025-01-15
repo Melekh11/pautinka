@@ -2,7 +2,7 @@ from sqlmodel import select
 
 from database import SessionDep
 from models.users import Users as UserModel, Workreviews as WorkreviewModel
-from shemas.user import RegestratingUser, WorkReview
+from shemas.user import RegisterUser, WorkReview
 
 def get_user_by_email(email: str, session: SessionDep) -> UserModel | None:
     return session.exec(select(UserModel)
@@ -18,7 +18,7 @@ def get_user_by_id(id: int, session: SessionDep) -> UserModel | None:
     return session.exec(select(UserModel).where(UserModel.id == id)).first()
 
 
-def create_user(user: RegestratingUser, hashed_password: str) -> UserModel:
+def create_user(user: RegisterUser, hashed_password: str) -> UserModel:
     new_user = UserModel(
         name=user.name,
         surname=user.surname,
@@ -26,7 +26,7 @@ def create_user(user: RegestratingUser, hashed_password: str) -> UserModel:
         email=user.email,
         hashed_password=hashed_password
     )
-    
+
     return new_user
 
 
@@ -39,5 +39,5 @@ def create_workreview(review: WorkReview, owner_id: int) -> WorkreviewModel:
         subcompany_name=review.subcompany_name,
         user_id=owner_id,
     )
-    
+
     return new_review
