@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from typing import Optional
+from typing import Optional, List
 
 from sqlmodel import SQLModel, Field, Relationship
 
@@ -57,6 +57,7 @@ class Users(SQLModel, table=True):
     tags: list["Tags"] = Relationship(back_populates="users", link_model=TagsUsers)
     workreviews: list["Workreviews"] = Relationship(back_populates="user")
 
+    vacancies: List["Vacancy"] = Relationship(back_populates="vacancy_holder")
 
 class Tags(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
@@ -75,3 +76,5 @@ class Workreviews(SQLModel, table=True):
 
     user_id: int = Field(foreign_key="users.id")
     user: "Users" = Relationship(back_populates="workreviews")
+
+

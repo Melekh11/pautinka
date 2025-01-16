@@ -4,8 +4,14 @@ from dotenv import load_dotenv
 from typing import Annotated
 
 from fastapi import Depends
-from sqlalchemy import URL
+from sqlalchemy import URL, select
 from sqlmodel import create_engine, Session, SQLModel
+
+from models.users import Users
+from models.vacancies import Vacancy
+
+from passlib.context import CryptContext
+
 
 load_dotenv(override=True)
 
@@ -24,15 +30,44 @@ connect_args = {}
 
 engine = create_engine(database_url, connect_args=connect_args)
 
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 
 def get_session():
+    """
+    Provides a database session for dependency injection.
+    
+    Yields:
+        Session: A SQLAlchemy session object.
+    """
     with Session(engine) as session:
         yield session
 
 
-def create_db_and_tables():
+def create_db_and_tables() -> None:
+    """
+    Creates database tables and a default root user if it does not exist.
+    
+    This function initializes the database schema by creating all tables defined
+    in the SQLModel metadata. It also checks if a root user exists, and if not,
+    creates one with the credentials specified in the environment variables.
+    """
     SQLModel.metadata.create_all(engine)
     logger.info("tables created")
 
+    with Session(engine) as session:
+        root_user = session.exec(select(Users).where(Users.email == "root@domain.com")).first()
+        if not root_user:
+            hashed_password = pwd_context.hash(os.getenv("ROOT_PASSWORD"))
+            new_user = Users(
+                name=os.getenv("ROOT_NAME"),
+                surname=os.getenv("ROOT_SURNAME"),
+                email=None,
+                phone=None,
+                hashed_password=hashed_password
+            )
+            session.add(new_user)
+            session.commit()
+            logger.info("Default root user created")
 
 SessionDep = Annotated[Session, Depends(get_session)]
