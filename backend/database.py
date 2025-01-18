@@ -8,7 +8,6 @@ from sqlalchemy import URL, select
 from sqlmodel import create_engine, Session, SQLModel
 
 from models.users import Users
-from models.vacancies import Vacancy
 
 from passlib.context import CryptContext
 
@@ -56,12 +55,15 @@ def create_db_and_tables() -> None:
     logger.info("tables created")
 
     with Session(engine) as session:
-        root_user = session.exec(select(Users).where(Users.email == "root@domain.com")).first()
+        _root_user_name = os.getenv("ROOT_NAME")
+        _root_user_surname = os.getenv("ROOT_SURNAME")
+        _root_user_password = os.getenv("ROOT_PASSWORD")
+        root_user = session.exec(select(Users).where(Users.name == _root_user_name)).first()
         if not root_user:
-            hashed_password = pwd_context.hash(os.getenv("ROOT_PASSWORD"))
+            hashed_password = pwd_context.hash(_root_user_password)
             new_user = Users(
-                name=os.getenv("ROOT_NAME"),
-                surname=os.getenv("ROOT_SURNAME"),
+                name=_root_user_name,
+                surname=_root_user_surname,
                 email=None,
                 phone=None,
                 hashed_password=hashed_password

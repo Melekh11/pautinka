@@ -1,3 +1,29 @@
+"""
+    This module contains the user routes. The user routes handle user registration, login, and profile management.
+    
+    Attributes:
+        user_router (APIRouter): The FastAPI router for the user routes.
+        SECRET_KEY (str): The secret key for JWT token encoding.
+        ACCESS_TOKEN_EXPIRE_MINUTES (int): The expiration time for JWT tokens.
+        HASH_ALGORITHM (str): The hashing algorithm for passwords.
+        logger (Logger): The logger for the user routes.
+        pwd_context (CryptContext): The password hashing context.
+        oauth2_scheme (OAuth2PasswordBearer): The OAuth2 password bearer for token authentication.
+        
+    Functions:
+        get_password_hash(password) -> str: Hashes a plain password.
+        verify_password(plain_password, hashed_password) -> bool: Verifies a plain password against a hashed password.
+        create_access_token(data, expires_delta) -> str: Creates a JWT access token.
+        get_current_user(token, session) -> ResponseUser: Retrieves the current authenticated user from the token.
+        register(session, user_data) -> Token: Registers a new user and returns an access token.
+        token(user_data, session) -> Token: Authenticates a user and returns an access token.
+        me(current_user) -> ResponseUser: Retrieves the current authenticated user's details.
+        get_user(user_id, session) -> ResponseUser: Retrieves a user's details by user ID.
+        me(session, edited_user, current_user) -> str: Updates the current authenticated user's details.
+        create_review(session, review_data, current_user) -> str: Creates a new work review.
+        search_user_by_tags(tags, session) -> list[ResponseUser]: Searches for users by tags.
+"""
+
 import os
 import logging
 from datetime import timedelta, datetime, timezone
@@ -10,7 +36,8 @@ from fastapi import APIRouter, HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 
-from database import SessionDep
+from database import SessionDep, select
+from models.users import TagsUsers, Tags, Users
 from shemas.user import EditedUser, RegisterUser, LoggingUser, ResponseUser, WorkReview
 from helpers.crud import (
     create_workreview,
@@ -41,23 +68,58 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/token")
 
 
 class Token(BaseModel):
+    """
+        Represents the token response model.
+    """
     access_token: str
     token_type: str
 
 
 class TokenData(BaseModel):
+    """
+    Represents the data contained in a JWT token.
+    """
     id: int
 
 
-def get_password_hash(password):
+def get_password_hash(password) -> str:
+    """
+    Hashes a plain password.
+
+    Args:
+        password (str): The plain password to hash.
+
+    Returns:
+        str: The hashed password.
+    """
     return pwd_context.hash(password)
 
 
-def verify_password(plain_password, hashed_password):
+def verify_password(plain_password, hashed_password) -> bool:
+    """
+    Verifies a plain password against a hashed password.
+
+    Args:
+        plain_password (str): The plain password.
+        hashed_password (str): The hashed password.
+
+    Returns:
+        bool: True if the password matches, False otherwise.
+    """
     return pwd_context.verify(plain_password, hashed_password)
 
 
-def create_access_token(data: dict, expires_delta: timedelta = timedelta(minutes=15)):
+def create_access_token(data: dict, expires_delta: timedelta = timedelta(minutes=15)) -> str:
+    """
+    Creates a JWT access token.
+
+    Args:
+        data (dict): The data to encode in the token.
+        expires_delta (timedelta): The token expiration time.
+
+    Returns:
+        str: The encoded JWT token.
+    """
     to_encode = data.copy()
     expire = datetime.now(timezone.utc) + expires_delta
     to_encode.update({"exp": expire})
@@ -68,6 +130,19 @@ def create_access_token(data: dict, expires_delta: timedelta = timedelta(minutes
 def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)], session: SessionDep
 ) -> ResponseUser:
+    """
+    Retrieves the current authenticated user from the token.
+
+    Args:
+        token (str): The JWT token.
+        session (SessionDep): The database session.
+
+    Returns:
+        ResponseUser: The current authenticated user.
+
+    Raises:
+        HTTPException: If the token is invalid or the user is not found.
+    """
     bad_token_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -92,7 +167,7 @@ def get_current_user(
 
 
 @user_router.post("/register", response_model=Token)
-async def register(session: SessionDep, user_data: RegisterUser):
+async def register(session: SessionDep, user_data: RegisterUser) -> Token:
 
     if user_data.email != "":
 
@@ -133,7 +208,17 @@ async def register(session: SessionDep, user_data: RegisterUser):
 async def token(
     user_data: LoggingUser,
     session: SessionDep,
-):
+) -> Token:
+    """
+    Authenticate a user and return an access token.
+    
+    Args:
+        user_data (LoggingUser): The user's login data.
+        session (SessionDep): The database session.
+        
+    Returns:
+        Token: The access token.
+    """
     if not (user_data.email or user_data.phone):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -175,12 +260,31 @@ async def token(
 
 
 @user_router.get("/me", response_model=ResponseUser)
-async def me(current_user: Annotated[ResponseUser, Depends(get_current_user)]):
+async def me(current_user: Annotated[ResponseUser, Depends(get_current_user)]) -> ResponseUser:
+    """
+    Retrieve the current authenticated user's details.
+
+    Args:
+        current_user (ResponseUser): The current authenticated user.
+
+    Returns:
+        ResponseUser: The current user's details.
+    """
     return current_user
 
 
 @user_router.get("/{user_id}", response_model=ResponseUser)
-def get_user(user_id: int, session: SessionDep):
+def get_user(user_id: int, session: SessionDep) -> ResponseUser:
+    """
+    Retrieve a user's details by user ID.
+
+    Args:
+        user_id (int): The ID of the user to retrieve.
+        session (SessionDep): The database session.
+
+    Returns:
+        ResponseUser: The user's details.
+    """
     return get_user_by_id(id=user_id, session=session)
 
 
@@ -189,7 +293,18 @@ async def me(
     session: SessionDep,
     edited_user: EditedUser,
     current_user: Annotated[ResponseUser, Depends(get_current_user)],
-):
+) -> str:
+    """
+    Update the current authenticated user's details.
+
+    Args:
+        session (SessionDep): The database session.
+        edited_user (EditedUser): The user data to update.
+        current_user (ResponseUser): The current authenticated user.
+
+    Returns:
+        str: Status message.
+    """
     for key in edited_user.model_fields_set:
         current_user[key] = edited_user[key]
 
@@ -204,9 +319,42 @@ async def create_review(
     session: SessionDep,
     review_data: WorkReview,
     current_user: Annotated[ResponseUser, Depends(get_current_user)],
-):
+) -> str:
+    """
+    Create a new work review.
+
+    Args:
+        session (SessionDep): The database session.
+        review_data (WorkReview): The work review data.
+        current_user (ResponseUser): The current authenticated user.
+
+    Returns:
+        str: Success message.
+    """
     new_review = create_workreview(review_data, current_user.id)
 
     session.add(new_review)
     session.commit()
     return "success"
+
+
+@user_router.get("/search/{tags}", response_model=list[ResponseUser])
+async def search_user_by_tags(tags: str, session: SessionDep) -> list[ResponseUser]:
+    """
+    Search for users by tags.
+
+    Args:
+        tags (str): Comma-separated list of tags to search for.
+        session (SessionDep): The database session.
+
+    Returns:
+        list[ResponseUser]: List of users matching the tags.
+    """
+    tag_list = tags.split(",")
+    users = session.exec(
+        select(Users)
+        .join(TagsUsers)
+        .join(Tags)
+        .where(Tags.name.in_(tag_list))
+    ).all()
+    return users

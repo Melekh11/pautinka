@@ -1,4 +1,5 @@
 fastapi[standard]>=0.115.5
+fastapi[test]
 pydantic>=2.10
 pyjwt
 passlib[bcrypt]
@@ -8,3 +9,4 @@ sqlmodel
 pyjwt[crypto]
 alembic
 black
+pytest
