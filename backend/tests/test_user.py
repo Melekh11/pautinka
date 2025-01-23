@@ -5,7 +5,7 @@ from backend.database import get_session, create_db_and_tables
 from backend.main import app
 from sqlmodel import Session, SQLModel, create_engine
 
-# Set up the test database 
+# Set up the test database   
 DATABASE_URL = "changeit!!"
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 
