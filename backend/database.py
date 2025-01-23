@@ -1,15 +1,24 @@
+"""
+This module sets up the database connection and provides utility functions for the application.
+
+The following functionalities are included:
+- Loading environment variables using dotenv.
+- Configuring the database connection URL and creating the SQLAlchemy engine.
+- Setting up the password hashing context using Passlib.
+- Providing a function to get a database session for dependency injection.
+- Creating the database tables and initializing the default root user if not present.
+"""
 import os
 import logging
-from dotenv import load_dotenv
-from typing import Annotated
 
+from typing import Annotated
+from dotenv import load_dotenv
 from fastapi import Depends
 from sqlalchemy import URL, select
 from sqlmodel import create_engine, Session, SQLModel
-
-from models.users import Users
-
 from passlib.context import CryptContext
+
+from .models.users import Users
 
 
 load_dotenv(override=True)

@@ -10,3 +10,4 @@ pyjwt[crypto]
 alembic
 black
 pytest
+Faker

@@ -51,8 +51,17 @@ class Likes(SQLModel, table=True):
     """
     Represents the many-to-many relationship for likes between users.
     """
-    user_id: int = Field(foreign_key="users.id", primary_key=True)
-    
+    user_id_from: int = Field(foreign_key="users.id", primary_key=True)
+    user_from: "Users" = Relationship(
+        back_populates="likes",
+        sa_relationship_kwargs={"foreign_keys": "Likes.user_id_from"},
+    )
+
+    user_id_to: int = Field(foreign_key="users.id", primary_key=True)
+    user_to: "Users" = Relationship(
+        back_populates="followers",
+        sa_relationship_kwargs={"foreign_keys": "Likes.user_id_to"},
+    )
 class Users(SQLModel, table=True):
     """
     Represents a user in the system.

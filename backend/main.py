@@ -1,13 +1,24 @@
-import os
+"""
+This module initializes and configures the FastAPI application.
+
+The following functionalities are included:
+- Loading environment variables using dotenv.
+- Configuring logging for the application.
+- Setting up CORS middleware to allow requests from specified origins.
+- Including API routers for authentication, user management, and work reviews.
+"""
+
 import logging
-from dotenv import load_dotenv
 from contextlib import asynccontextmanager
+from dotenv import load_dotenv
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from routes.user import user_router
-from database import create_db_and_tables
+from .routes.auth_routes import auth_router
+from .routes.user_routes import user_router
+from .routes.review_routes import review_router
+
 
 load_dotenv(override=True)
 
@@ -27,7 +38,9 @@ origins = [
 
 app = FastAPI()
 
+app.include_router(auth_router)
 app.include_router(user_router)
+app.include_router(review_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,

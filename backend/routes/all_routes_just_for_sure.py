@@ -1,29 +1,3 @@
-"""
-    This module contains the user routes. The user routes handle user registration, login, and profile management.
-    
-    Attributes:
-        user_router (APIRouter): The FastAPI router for the user routes.
-        SECRET_KEY (str): The secret key for JWT token encoding.
-        ACCESS_TOKEN_EXPIRE_MINUTES (int): The expiration time for JWT tokens.
-        HASH_ALGORITHM (str): The hashing algorithm for passwords.
-        logger (Logger): The logger for the user routes.
-        pwd_context (CryptContext): The password hashing context.
-        oauth2_scheme (OAuth2PasswordBearer): The OAuth2 password bearer for token authentication.
-        
-    Functions:
-        get_password_hash(password) -> str: Hashes a plain password.
-        verify_password(plain_password, hashed_password) -> bool: Verifies a plain password against a hashed password.
-        create_access_token(data, expires_delta) -> str: Creates a JWT access token.
-        get_current_user(token, session) -> ResponseUser: Retrieves the current authenticated user from the token.
-        register(session, user_data) -> Token: Registers a new user and returns an access token.
-        token(user_data, session) -> Token: Authenticates a user and returns an access token.
-        me(current_user) -> ResponseUser: Retrieves the current authenticated user's details.
-        get_user(user_id, session) -> ResponseUser: Retrieves a user's details by user ID.
-        me(session, edited_user, current_user) -> str: Updates the current authenticated user's details.
-        create_review(session, review_data, current_user) -> str: Creates a new work review.
-        search_user_by_tags(tags, session) -> list[ResponseUser]: Searches for users by tags.
-"""
-
 import os
 import logging
 from datetime import timedelta, datetime, timezone
@@ -36,10 +10,10 @@ from fastapi import APIRouter, HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 
-from database import SessionDep, select
-from models.users import TagsUsers, Tags, Users
-from shemas.user import EditedUser, RegisterUser, LoggingUser, ResponseUser, WorkReview
-from helpers.crud import (
+from ..database import SessionDep, select
+from ..models.users import TagsUsers, Tags, Users
+from ..schemas.user import EditedUser, RegisterUser, LoggingUser, ResponseUser, WorkReview
+from ..helpers.crud import (
     create_workreview,
     get_user_by_email,
     get_user_by_phone,
@@ -289,7 +263,7 @@ def get_user(user_id: int, session: SessionDep) -> ResponseUser:
 
 
 @user_router.patch("/me")
-async def me(
+async def me_(
     session: SessionDep,
     edited_user: EditedUser,
     current_user: Annotated[ResponseUser, Depends(get_current_user)],
