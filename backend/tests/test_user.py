@@ -1,8 +1,8 @@
 import os
 import pytest
 from fastapi.testclient import TestClient
+from backend.database import get_session, create_db_and_tables
 from backend.main import app
-from database import get_session, create_db_and_tables
 from sqlmodel import Session, SQLModel, create_engine
 
 # Set up the test database
